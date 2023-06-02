@@ -165,8 +165,8 @@ enum MyEnumError {
     #[display(fmt="bad request")]
     BadClientData,
 
-    #[display(fmt="timeout")]
-    Timeout,
+    // #[display(fmt="timeout")]
+    // Timeout,
 }
 
 impl error::ResponseError for MyEnumError {
@@ -180,7 +180,7 @@ impl error::ResponseError for MyEnumError {
         match *self {
             MyEnumError::InternalError => StatusCode::INTERNAL_SERVER_ERROR,
             MyEnumError::BadClientData => StatusCode::BAD_REQUEST,
-            MyEnumError::Timeout => StatusCode::GATEWAY_TIMEOUT,
+            // MyEnumError::Timeout => StatusCode::GATEWAY_TIMEOUT,
         }
     }
 }
@@ -286,7 +286,7 @@ async fn main() -> std::io::Result<()> {
             .route("/variant", web::get().to(variant))
             .route("/some_error", web::get().to(some_error))
     })
-        .bind(("127.0.0.1", 8080))
+        .bind(("0.0.0.0", 8080))
         .unwrap()
         .workers(1)
         .run()

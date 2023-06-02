@@ -19,12 +19,6 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           export_default_credentials: true
 
-      - name: Configure Docker
-        run: |-
-          echo ${{ secrets.GCP_CRED }} | base64 --decode > gcp-sa-key.json
-          gcloud auth activate-service-account --key-file=gcp-sa-key.json
-          gcloud auth configure-docker
-
       - name: Build Docker Image
         run: docker build -t $IMAGE_NAME:latest .
 

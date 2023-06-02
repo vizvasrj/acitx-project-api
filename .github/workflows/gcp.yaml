@@ -5,29 +5,29 @@ on:
 
 jobs:
   build-push-gcr:
-  runs-on: ubuntu-latest
-  env:
-    IMAGE_NAME: acitx-project-api
-    PROJECT_ID: quick-yen-321916
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: acitx-project-api
+      PROJECT_ID: quick-yen-321916
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - uses: google-github-actions/setup-gcloud@master
-      with:
-        service_account_key: ${{ secrets.GCP_CRED }}
-        project_id: ${{ env.PROJECT_ID }}
-        export_default_credentials: true
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCP_CRED }}
+          project_id: ${{ env.PROJECT_ID }}
+          export_default_credentials: true
 
-    - name: Build Docker Image
-      run: |-
-        gcloud auth configure-docker --quiet
+      - name: Build Docker Image
+        run: |-
+          gcloud auth configure-docker --quiet
 
-    - name: Push Docker Image to Container Registry (GCR)
-      env:
-        GIT_TAG: v0.1.0
-      run: |-
-        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
-        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
-        docker push grc.io/$PROJECT_ID/$IMAGE_NAME:latest
-        docker push grc.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+      - name: Push Docker Image to Container Registry (GCR)
+        env:
+          GIT_TAG: v0.1.0
+        run: |-
+          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+          docker push grc.io/$PROJECT_ID/$IMAGE_NAME:latest
+          docker push grc.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
